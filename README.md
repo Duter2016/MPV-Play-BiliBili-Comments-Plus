@@ -24,6 +24,12 @@
 # mpv带弹幕播放在线视频
 alias mpvd='python /home/dh/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py && mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)'
 ```
+上面剪贴板参数根据你使用的剪贴板工具，自己修改为以下可参考的对应参数：
+
+* Plasma KDE桌面默认剪切板工具为`$(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)`
+* Parcellite 为 `$(parcellite --clipboard)`
+* xclip 为 `$(xclip --clipboard)`
+* xsel 为 `$(xsel --clipboard)`
 
 保存后回到命令行执行以下命令使其生效：
 
