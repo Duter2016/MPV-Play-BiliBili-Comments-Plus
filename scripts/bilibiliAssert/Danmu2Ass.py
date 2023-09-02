@@ -2,6 +2,7 @@
 
 # The second author is ZhiyuShang.
 # The original author m13253(github).
+# https://github.com/itKelis/MPV-Play-BiliBili-Comments
 
 import argparse
 import gettext
