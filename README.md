@@ -6,6 +6,10 @@
 
 ## linux系统下安装方法如下：
 
+先安装一个python模块pyperclip（其他模块基本都是内置的，无需另外安装）：
+
+`pip3 install pyperclip`
+
 在[MPV-Play-BiliBili-Comments-Plus](https://github.com/Duter2016/MPV-Play-BiliBili-Comments-Plus)下载`scripts/bilibiliAssert`下面的三个脚本文件到mpv的配置目录`/home/<username>/.config/mpv/scripts/bilibiliAssert`，然后修改如下两个文件：
 
 （1）将`～/.config/mpv/scripts/bilibiliAssert/main.lua`中如下代码中`dh`替换为你的`<pc username>`
