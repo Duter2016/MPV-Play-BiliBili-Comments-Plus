@@ -25,18 +25,32 @@ def get_avbvid(url):
     p = 0
     if m_obj:
         p = int(m_obj.group(1))
-    s_pos = url.rfind("/") + 1
-    r_pos = url.rfind("?")
+    stra = "video/"
+    strb = "/?"
+    s_posnew = url.rfind(stra) + 6
+    s_posnewend = s_posnew + 12
+    r_posnew = url.rfind(strb)
+    #s_pos = url.rfind("/") + 1
+    #r_pos = url.rfind("?")
     avbvid = None
-    if r_pos == -1:
-        avbvid = url[s_pos:]
+    if r_posnew == -1:
+        avbvid = url[s_posnew:s_posnewend]
     else:
-        avbvid = url[s_pos:r_pos]
+        avbvid = url[s_posnew:r_posnew]
+    #if r_pos == -1:
+    #    avbvid = url[s_pos:]
+    #else:
+    #    avbvid = url[s_pos:r_pos]
     if avbvid.startswith("av"):
         return "aid", avbvid[2:], p
     else:
         return "bvid", avbvid, p
-
+    #print(url.strip().split('/'))
+    #print(s_posnew)
+    #print(r_posnew)
+    #print(s_pos)
+    #print(r_pos)
+    #print(avbvid)
 
 def get_cid(url, all_cid=False):
     t, avbvid, p = get_avbvid(url)
