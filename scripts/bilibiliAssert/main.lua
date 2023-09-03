@@ -11,15 +11,47 @@ function log(string,secs)
 	mp.osd_message(string,secs)
 end
 
+---- load "GetBiliDanmuCID.py" to produce danmaku cid (method 1)
+--local python_path = 'python' -- path to python bin
+---- get script directory 
+--local directory = mp.get_script_directory()
+--local py_path_cid = ''..directory..'/GetBiliDanmuCID.py'
+---- under windows platform, convert path format
+--if string.find(directory, "\\")
+--then
+--	string.gsub(directory, "/", "\\")
+--	py_path_cid = ''..directory..'\\GetBiliDanmuCID.py'
+--end
+---- load a python script file into lua
+----mp.commandv("run", "python3", py_path_cid)
+
+-- load "GetBiliDanmuCID.py" to produce danmaku cid (method 2)
+os.execute('python ~/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py')
+
 -- get cid by read file "bilicid"
 function ingest(file)
-   local f = io.open(file, "r")
-   local lines = f:read("*all")
-   f:close()
-   return(lines)
+    local f = io.open(file, "r")
+    if f then
+        local lines = f:read("*all")
+        f:close()
+        return(lines)
+    else
+        print("未获取bili视频弹幕cid")
+    end
 end
-bilicidnum=ingest("/home/dh/.config/mpv/scripts/bilibiliAssert/bilicid")
+-- get bilicid file directory 
+local directory = mp.get_script_directory()
+local py_path_bilicid = ''..directory..'/bilicid'
+-- under windows platform, convert path format
+if string.find(directory, "\\")
+then
+	string.gsub(directory, "/", "\\")
+	py_path_bilicid = ''..directory..'\\bilicid'
+end
+-- start execute the function to read file "bilicid"
+bilicidnum=ingest(py_path_bilicid)
 print(bilicidnum)
+
 
 -- download/load function
 function assprocess()
