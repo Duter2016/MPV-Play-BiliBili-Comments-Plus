@@ -436,6 +436,8 @@ def getComments(cid,font_size = 25):
     # url = 'https://comment.bilibili.com/{}.xml'.format(cid[0])
     url = ''.join(['https://comment.bilibili.com/',cid[0],'.xml'])
     response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS))
+    # 如果报 DeprecationWarning: ssl.PROTOCOL_TLS is deprecated
+    # 参考 "https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLS_SERVER"
     data = str(zlib.decompress(response.read(), -zlib.MAX_WBITS), "utf-8")
     response.close()
     comments = []
