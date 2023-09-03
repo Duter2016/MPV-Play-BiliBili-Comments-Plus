@@ -10,13 +10,9 @@
 
 `pip3 install pyperclip`
 
-在[MPV-Play-BiliBili-Comments-Plus](https://github.com/Duter2016/MPV-Play-BiliBili-Comments-Plus)下载`scripts/bilibiliAssert`下面的三个脚本文件到mpv的配置目录`/home/<username>/.config/mpv/scripts/bilibiliAssert`，然后修改如下两个文件：
+在[MPV-Play-BiliBili-Comments-Plus](https://github.com/Duter2016/MPV-Play-BiliBili-Comments-Plus)下载`scripts/bilibiliAssert`下面的三个脚本文件到mpv的配置目录`/home/<username>/.config/mpv/scripts/bilibiliAssert`，然后修改如下文件：
 
-（1）将`～/.config/mpv/scripts/bilibiliAssert/main.lua`中如下代码中`dh`替换为你的`<pc username>`
-
-`bilicidnum=ingest("/home/dh/.config/mpv/scripts/bilibiliAssert/bilicid")`
-
-（2）将`～/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py`中如下代码中`dh`替换为你的`<pc username>`
+将`～/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py`中如下代码中`dh`替换为你的`<pc username>`
 
 `"/home/dh/.config/mpv/scripts/bilibiliAssert/bilicid"`
 
@@ -26,7 +22,7 @@
 
 ```
 # mpv带弹幕播放在线视频
-alias mpvb='python /home/dh/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py && mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)'
+alias mpvb='mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)'
 ```
 上面剪贴板参数根据你使用的剪贴板工具，自己修改为以下可参考的对应参数：
 
@@ -101,7 +97,4 @@ revda也是调用的mpv,并且支持弹幕。只需要获取视频播放地址�
 
 `dmlive -u <url>`
 
-
-## 一个问题
-
-想把GetBiliDanmuCID.py脚本加载进main.lua中加载，但是尝试多种方式都不加载GetBiliDanmuCID.py。有尝试成功的，欢迎修改。
+### 可用
