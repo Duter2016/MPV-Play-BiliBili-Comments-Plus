@@ -18,25 +18,26 @@ def get_real_url(url):
 
 
 def get_avbvid(url):
-    if "b23.tv" in url:
+    if "b23.tv" in url:    # 哔哩哔哩短链
         url = get_real_url(url)
     url = url.strip("/")
-    m_obj = re.search("[?&]p=(\d+)", url)
+    m_obj = re.search("[?&]p=(\d+)", url)    # 合集多p视频旧格式
     p = 0
     if m_obj:
         p = int(m_obj.group(1))
-    stra = "video/"
-    strb = "/?"
-    s_posnew = url.rfind(stra) + 6
-    s_posnewend = s_posnew + 12
-    r_posnew = url.rfind(strb)
+    strbv = "/BV"    # 适配bv视频API
+    s_posbv = url.rfind(strbv) + 1
+    s_posbvend = s_posbv + 12
+    strav = "/av"    # 适配av视频API
+    r_posav = url.rfind(strav) + 1
+    r_posavend = r_posav + 11
     #s_pos = url.rfind("/") + 1
     #r_pos = url.rfind("?")
     avbvid = None
-    if r_posnew == -1:
-        avbvid = url[s_posnew:s_posnewend]
+    if r_posav == 0:
+        avbvid = url[s_posbv:s_posbvend]
     else:
-        avbvid = url[s_posnew:r_posnew]
+        avbvid = url[r_posav:r_posavend]
     #if r_pos == -1:
     #    avbvid = url[s_pos:]
     #else:
@@ -46,8 +47,10 @@ def get_avbvid(url):
     else:
         return "bvid", avbvid, p
     #print(url.strip().split('/'))
-    #print(s_posnew)
-    #print(r_posnew)
+    #print(s_posbv)
+    #print(s_posbvend)
+    #print(r_posav)
+    #print(r_posavend)
     #print(s_pos)
     #print(r_pos)
     #print(avbvid)
