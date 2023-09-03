@@ -18,7 +18,7 @@
 
 （2）将`～/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py`中如下代码中`dh`替换为你的`<pc username>`
 
-`file = open("/home/dh/.config/mpv/scripts/bilibiliAssert/bilicid", 'w')`
+`"/home/dh/.config/mpv/scripts/bilibiliAssert/bilicid"`
 
 然后，命令别名 alias：
 
