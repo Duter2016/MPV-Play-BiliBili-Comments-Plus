@@ -22,11 +22,11 @@
 
 然后，命令别名 alias：
 
-打开用户配置文件 `~/.bash_profile` ， 在文件最后添加如下 alias（注意是英文半角单引号，mpvd名字可以自定义）：
+打开用户配置文件 `~/.bash_profile` ， 在文件最后添加如下 alias（注意是英文半角单引号，mpvb名字可以自定义）：
 
 ```
 # mpv带弹幕播放在线视频
-alias mpvd='python /home/dh/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py && mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)'
+alias mpvb='python /home/dh/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py && mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)'
 ```
 上面剪贴板参数根据你使用的剪贴板工具，自己修改为以下可参考的对应参数：
 
@@ -43,7 +43,7 @@ alias mpvd='python /home/dh/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.p
 
 这里我们假设已经在网页复制了B站视频网址到剪贴板中，则在终端执行如下命令就可以立即播放了：
 
-`mpvd`
+`mpvb`
 
 mpv播放后将会自动加载弹幕，按下按键`b`会重新载入弹幕,弹幕以字幕方式加载，如需隐藏按下`v`即可。如果希望更改快捷键，在main.lua中最后一行修改想要的快捷键。
 
