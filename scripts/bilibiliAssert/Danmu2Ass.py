@@ -435,9 +435,11 @@ def export(func):
 def getComments(cid,font_size = 25):
     # url = 'https://comment.bilibili.com/{}.xml'.format(cid[0])
     url = ''.join(['https://comment.bilibili.com/',cid[0],'.xml'])
-    response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS))
-    # 如果报 DeprecationWarning: ssl.PROTOCOL_TLS is deprecated
-    # 参考 "https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLS_SERVER"
+    ## for python 3.6 to 3.9, use "PROTOCOL_TLS"
+    #response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS))
+    ## for python 3.10 and newer,use "PROTOCOL_TLS_CLIENT"
+    ## refer to "https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLS_SERVER"
+    response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT).load_verify_locations("/etc/ssl/certs/ca-bundle.crt"))
     data = str(zlib.decompress(response.read(), -zlib.MAX_WBITS), "utf-8")
     response.close()
     comments = []
