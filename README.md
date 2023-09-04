@@ -1,10 +1,20 @@
 # MPV-Play-BiliBili-Comments-Plus
 
-使用mpv自动下载弹幕并加载，不依赖Play-With-MPV，自动解析弹幕cid
+只需要你有一个你要播放的B站视频地址即可！其他一概不要！
+
+使用mpv自动下载弹幕并加载，不依赖Play-With-MPV，自动解析弹幕cid，并使用danmaku2ass下载xml弹幕文件、转为ass格式。
 
 脚本修改自[MPV-Play-BiliBili-Comments](https://github.com/itKelis/MPV-Play-BiliBili-Comments)，并参考[《B站视频弹幕解析》](https://juejin.cn/post/7137928570080329741)。
 
-## linux系统下安装方法如下：
+## 1.加载原理
+
+（1）当你复制视频地址后，插件启动GetBiliDanmuCID.py自动读取剪切板中视频地址，识别为B站视频后，自动提取视频弹幕cid；
+
+（2）视频弹幕cid传递给插件，插件再启动Danmu2Ass.py自动完成下载xml字幕文件，并转换为.ass文件存放到指定目录；
+
+（3）转换完成后，插件自动加载指定目录下的ass文件至播放视频。
+
+## 2.linux系统下安装方法如下：
 
 先安装一个python模块pyperclip（其他模块基本都是内置的，无需另外安装）：
 
@@ -35,7 +45,7 @@ alias mpvb='mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClip
 
 `source ~/.bash_profile`
 
-## 使用方法：
+## 3.使用方法：
 
 这里我们假设已经在网页复制了B站视频网址到剪贴板中，则在终端执行如下命令就可以立即播放了：
 
@@ -47,7 +57,7 @@ alias mpvb='mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClip
 
 mpv播放后将会自动加载弹幕，按下按键`b`会重新载入弹幕,弹幕以字幕方式加载，如需隐藏按下`v`即可。如果希望更改快捷键，在main.lua中最后一行修改想要的快捷键。
 
-### 已适配的B站网址格式：
+### 4.已适配的B站网址格式：
 
 > B站未再改变api接口前，如下格式是能正常解析的。
 
@@ -101,4 +111,4 @@ revda也是调用的mpv,并且支持弹幕。只需要获取视频播放地址�
 
 `dmlive -u <url>`
 
-### 可用
+### 5.有问题可反馈
