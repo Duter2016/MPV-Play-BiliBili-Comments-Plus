@@ -57,7 +57,15 @@ alias mpvb='mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClip
 
 mpv播放后将会自动加载弹幕，按下按键`b`会重新载入弹幕,弹幕以字幕方式加载，如需隐藏按下`v`即可。如果希望更改快捷键，在main.lua中最后一行修改想要的快捷键。
 
-### 4.已适配的B站网址格式：
+## 4.为uosc添加memo菜单：
+
+编辑`/home/<username>/.config/mpv/input.conf`文件，添加如下一行代码即可（点击左下角三道线即是）：
+
+```
+# script-binding reLoadDanmaku #! ReLoadDanmaku
+```
+
+## 5.已适配的B站网址格式：
 
 > B站未再改变api接口前，如下格式是能正常解析的。
 
@@ -111,4 +119,4 @@ revda也是调用的mpv,并且支持弹幕。只需要获取视频播放地址�
 
 `dmlive -u <url>`
 
-### 5.有问题可反馈
+### 6.有问题可反馈
