@@ -2,6 +2,10 @@
 -- ===================|
 -- note to escape path for winodws (c:\\users\\user\\...)
 
+-- 【 备用】：
+    -- 在lua中运行 python 脚本，不带lua传递参数videourl
+    --mp.commandv("run", "python3", py_path_cid)
+
 local utils = require 'mp.utils'
 
 -- Log function: log to both terminal and MPV OSD (On-Screen Display)
@@ -12,52 +16,49 @@ function log(string,secs)
 end
 
 
---[[ 
--- 【 运行 "GetBiliDanmuCID.py" 获取 danmaku cid (方法 1)】
--- get video url from "mpv <video url>“
-local videourl = mp.get_property('playlist/0/filename')
---print(videourl)
-
-local python_path = 'python' -- path to python bin
--- get script directory 
-local directory = mp.get_script_directory()
-local py_path_cid = ''..directory..'/GetBiliDanmuCID.py'
--- under windows platform, convert path format
-if string.find(directory, "\\")
-then
-	string.gsub(directory, "/", "\\")
-	py_path_cid = ''..directory..'\\GetBiliDanmuCID.py'
-end
-
--- 在lua中运行 python 脚本，不带lua传递参数videourl
---mp.commandv("run", "python3", py_path_cid)
-
--- 在lua中运行 python 脚本，带lua传递参数videourl
-local argurl = { 'python', py_path_cid, videourl,}
-log('即将运行GetBiliDanmuCID.py')
--- run python to get comments
-mp.command_native_async({
-	name = 'subprocess',
-	playback_only = false,
-	capture_stdout = true,
-	args = argurl,
-	capture_stdout = true
-})
-
--- 等待5秒钟，生成bilicid文件，再继续运行
-function sleep(n)
-   os.execute("sleep " .. n)
-end
-sleep(3)
---]]
-
-
--- 【 运行 "GetBiliDanmuCID.py" 获取 danmaku cid (方法 2)】
-os.execute('python ~/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py')
-
-
 -- get cid by read file "bilicid"
 function ingest(file)
+	-- 【第一步】运行 "GetBiliDanmuCID.py"
+	-- 【(方法 1)】
+	-- 通过mpv自带参数从“mpv <video url>“提取url
+	local videourl = mp.get_property('playlist/0/filename')
+	--print(videourl)
+
+	local python_path = 'python' -- path to python bin
+	-- get script directory 
+	local directory = mp.get_script_directory()
+	local py_path_cid = ''..directory..'/GetBiliDanmuCID.py'
+	-- under windows platform, convert path format
+	if string.find(directory, "\\")
+	then
+		string.gsub(directory, "/", "\\")
+		py_path_cid = ''..directory..'\\GetBiliDanmuCID.py'
+	end
+
+	-- 在lua中运行 python 脚本，带lua传递参数videourl
+	local argurl = { 'python', py_path_cid, videourl,}
+	--log('即将运行GetBiliDanmuCID.py')
+	-- run python to get comments
+	mp.command_native_async({
+		name = 'subprocess',
+		playback_only = false,
+		capture_stdout = true,
+		args = argurl,
+		capture_stdout = true
+	})
+
+	-- 等待3秒钟，生成bilicid文件，再继续运行
+	function sleep(n)
+	   os.execute("sleep " .. n)
+	end
+	sleep(3)
+
+	-- 【(方法 2)】
+	-- 使用此方法，不用设置等待，但需“GetBiliDanmuCID.py“采用读取剪切板
+	--os.execute('python ~/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py')
+
+
+    -- 【第二步】定义从“bilicid”文件读取cid功能
     local f = io.open(file, "r")
     if f then
         local lines = f:read("*all")
@@ -67,22 +68,24 @@ function ingest(file)
         print("未获取bili视频弹幕cid")
     end
 end
--- get bilicid file directory 
-local directory = mp.get_script_directory()
-local py_path_bilicid = ''..directory..'/bilicid'
--- under windows platform, convert path format
-if string.find(directory, "\\")
-then
-	string.gsub(directory, "/", "\\")
-	py_path_bilicid = ''..directory..'\\bilicid'
-end
--- start execute the function to read file "bilicid"
-bilicidnum=ingest(py_path_bilicid)
---print(bilicidnum)
 
 
 -- download/load function
 function assprocess()
+	-- 【第三步】执行“ingest(file)”读取cid
+	-- get bilicid file directory 
+	local directory = mp.get_script_directory()
+	local py_path_bilicid = ''..directory..'/bilicid'
+	-- under windows platform, convert path format
+	if string.find(directory, "\\")
+	then
+		string.gsub(directory, "/", "\\")
+		py_path_bilicid = ''..directory..'\\bilicid'
+	end
+	-- start execute the function to read file "bilicid"
+	bilicidnum=ingest(py_path_bilicid)
+	--print(bilicidnum)
+
 	-- get video cid
 	local cid = bilicidnum
 	-- get video cid from mpv by using "play-with-mpv"
@@ -92,6 +95,7 @@ function assprocess()
 		return
 	end
 	
+	-- 【第四步】进行弹幕xml 2 ass转码
 	local python_path = 'python' -- path to python bin
 
 	-- get script directory 
@@ -146,6 +150,6 @@ function assprocess()
 
 end
 
-
+-- 设置按快捷键“b”重新载入弹幕
 mp.add_key_binding('b',	assprocess)
 mp.register_event("start-file", assprocess)
