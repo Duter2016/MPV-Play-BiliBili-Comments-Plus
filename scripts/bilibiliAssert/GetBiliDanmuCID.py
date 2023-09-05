@@ -5,6 +5,7 @@ import re
 import requests
 import pyperclip
 import os
+#import argparse    # 从lua传入视频网址参数模块
 
 headers = {
     "authority": "api.bilibili.com",
@@ -13,9 +14,22 @@ headers = {
 }
 
 
+# 读取从main.lua传输bilibili网址“videourl参数”
+# 注意取消“import argparse”注释
+# parser = argparse.ArgumentParser()    # 创建解析对象
+# parser.add_argument('videourl', metavar=('VIDEOURL'), nargs='+', help=('Video url to grab cid'))    # 向该对象中添加你要关注的命令行参数和选项，B站视频url地址
+# args = parser.parse_args()    # 调用parse_args()方法进行解析
+# findvideourl = args.videourl    # 获得videourl在main.lua中参数值
+# getvideourl = findvideourl[0]
+# geturlgroup=['"',getvideourl,'"']
+
+
 # 从剪切板读取bilibili网址
 urlfromclip = pyperclip.paste()    # 从剪切板读取bilibili网址
 geturlgroup=['"',urlfromclip,'"']
+
+
+# 转化提取的bilibili网址为提取cid API可用的字符串
 geturl=''.join(geturlgroup)    # 组合为可用的网址字符串
 print(geturl)    # 测试网址正确性
 url = str(geturl)

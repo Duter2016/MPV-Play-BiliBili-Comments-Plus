@@ -11,22 +11,50 @@ function log(string,secs)
 	mp.osd_message(string,secs)
 end
 
----- load "GetBiliDanmuCID.py" to produce danmaku cid (method 1)
---local python_path = 'python' -- path to python bin
----- get script directory 
---local directory = mp.get_script_directory()
---local py_path_cid = ''..directory..'/GetBiliDanmuCID.py'
----- under windows platform, convert path format
---if string.find(directory, "\\")
---then
---	string.gsub(directory, "/", "\\")
---	py_path_cid = ''..directory..'\\GetBiliDanmuCID.py'
---end
----- load a python script file into lua
-----mp.commandv("run", "python3", py_path_cid)
 
--- load "GetBiliDanmuCID.py" to produce danmaku cid (method 2)
+--[[ 
+-- 【 运行 "GetBiliDanmuCID.py" 获取 danmaku cid (方法 1)】
+-- get video url from "mpv <video url>“
+local videourl = mp.get_property('playlist/0/filename')
+--print(videourl)
+
+local python_path = 'python' -- path to python bin
+-- get script directory 
+local directory = mp.get_script_directory()
+local py_path_cid = ''..directory..'/GetBiliDanmuCID.py'
+-- under windows platform, convert path format
+if string.find(directory, "\\")
+then
+	string.gsub(directory, "/", "\\")
+	py_path_cid = ''..directory..'\\GetBiliDanmuCID.py'
+end
+
+-- 在lua中运行 python 脚本，不带lua传递参数videourl
+--mp.commandv("run", "python3", py_path_cid)
+
+-- 在lua中运行 python 脚本，带lua传递参数videourl
+local argurl = { 'python', py_path_cid, videourl,}
+log('即将运行GetBiliDanmuCID.py')
+-- run python to get comments
+mp.command_native_async({
+	name = 'subprocess',
+	playback_only = false,
+	capture_stdout = true,
+	args = argurl,
+	capture_stdout = true
+})
+
+-- 等待5秒钟，生成bilicid文件，再继续运行
+function sleep(n)
+   os.execute("sleep " .. n)
+end
+sleep(3)
+--]]
+
+
+-- 【 运行 "GetBiliDanmuCID.py" 获取 danmaku cid (方法 2)】
 os.execute('python ~/.config/mpv/scripts/bilibiliAssert/GetBiliDanmuCID.py')
+
 
 -- get cid by read file "bilicid"
 function ingest(file)
@@ -50,28 +78,15 @@ then
 end
 -- start execute the function to read file "bilicid"
 bilicidnum=ingest(py_path_bilicid)
-print(bilicidnum)
+--print(bilicidnum)
 
 
 -- download/load function
 function assprocess()
-	-- get cid by python
-	local python_path = 'python' -- path to python bin
-
-	-- get script directory 
-	local directory = mp.get_script_directory()
-	local py_path = ''..directory..'/BiliDanmuDownload.py'
-
-	-- under windows platform, convert path format
-	if string.find(directory, "\\")
-	then
-		string.gsub(directory, "/", "\\")
-		py_path = ''..directory..'\\BiliDanmuDownload.py'
-	end
-
 	-- get video cid
 	local cid = bilicidnum
-	-- local cid = mp.get_opt('cid')
+	-- get video cid from mpv by using "play-with-mpv"
+	--local cid = mp.get_opt('cid')
 	if (cid == nil)
 	then
 		return
