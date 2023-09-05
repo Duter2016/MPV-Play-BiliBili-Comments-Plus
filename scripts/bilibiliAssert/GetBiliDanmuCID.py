@@ -14,7 +14,7 @@ headers = {
 }
 
 
-# 读取从main.lua传输bilibili网址“videourl参数”
+# 读取从main.lua传输bilibili网址“videourl参数”(对应方法 1)
 # 注意取消“import argparse”注释
 # parser = argparse.ArgumentParser()    # 创建解析对象
 # parser.add_argument('videourl', metavar=('VIDEOURL'), nargs='+', help=('Video url to grab cid'))    # 向该对象中添加你要关注的命令行参数和选项，B站视频url地址
@@ -24,7 +24,7 @@ headers = {
 # geturlgroup=['"',getvideourl,'"']
 
 
-# 从剪切板读取bilibili网址
+# 从剪切板读取bilibili网址(对应方法 2)
 urlfromclip = pyperclip.paste()    # 从剪切板读取bilibili网址
 geturlgroup=['"',urlfromclip,'"']
 
