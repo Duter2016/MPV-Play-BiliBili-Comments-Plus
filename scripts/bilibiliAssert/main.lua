@@ -151,5 +151,5 @@ function assprocess()
 end
 
 -- 设置按快捷键“b”重新载入弹幕
-mp.add_key_binding('b',	assprocess)
+mp.add_key_binding('b', 'reLoadDanmaku', assprocess)
 mp.register_event("start-file", assprocess)
