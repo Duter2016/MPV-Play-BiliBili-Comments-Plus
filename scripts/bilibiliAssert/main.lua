@@ -22,6 +22,8 @@ function ingest(file)
 	-- 【(方法 1)】
 	-- 通过mpv自带参数从“mpv <video url>“提取url
 	local videourl = mp.get_property('playlist/0/filename')
+	  --以下命令也可以通过mpv自带参数从“mpv <video url>“提取url
+	--local videourl = mp.get_property('stream-open-filename')
 	print('Video URl:', videourl)
 
 	local python_path = 'python' -- path to python bin
