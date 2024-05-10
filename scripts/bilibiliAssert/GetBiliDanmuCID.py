@@ -45,7 +45,7 @@ def get_avbvid(url):
     if "b23.tv" in url:    # 哔哩哔哩短链
         url = get_real_url(url)
     url = url.strip("/")
-    m_obj = re.search("[?&]p=(\d+)", url)    # 合集多p视频旧格式
+    m_obj = re.search(r"[?&]p=(\d+)", url)    # 合集多p视频旧格式
     p = 0
     if m_obj:
         p = int(m_obj.group(1))
