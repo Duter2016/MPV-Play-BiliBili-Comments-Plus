@@ -31,6 +31,9 @@
 打开用户配置文件 `~/.bash_profile` ， 在文件最后添加如下 alias（注意是英文半角单引号，mpvb名字可以自定义）：
 
 ```
+# 添加qt6的qdbus的PATH，否则klipper的qdbus通信失败
+export PATH=$PATH:/usr/lib/qt6/bin
+
 # mpv带弹幕播放在线视频
 alias mpvb='mpv $(qdbus org.kde.klipper /klipper org.kde.klipper.klipper.getClipboardContents)'
 ```
