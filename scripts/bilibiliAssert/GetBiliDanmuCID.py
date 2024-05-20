@@ -6,10 +6,20 @@ import requests
 import pyperclip
 import os
 import argparse    # 从lua传入视频网址参数模块
+#import browsercookie    # 使用cookie
+
+"""
+# 获取cookie，前提是需要浏览器登陆过
+#find_cookie = browsercookie.chrome()
+#find_cookie = browsercookie.chromium()
+find_cookie = browsercookie.firefox()
+#for cookie in find_cookie:
+#    print(cookie)
+"""
 
 headers = {
     "authority": "api.bilibili.com",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0",
     "accept": "application/json, text/plain, */*",
 }
 
@@ -36,7 +46,8 @@ url = str(geturl)
 
 
 def get_real_url(url):
-    r = requests.head(url, headers=headers)
+    r = requests.head(url, cookies=find_cookie, headers=headers)    # 不使用cookie
+#    r = requests.head(url, cookies=find_cookie, headers=headers)    # 使用cookie
     return r.headers['Location']
 
 
@@ -45,7 +56,7 @@ def get_avbvid(url):
     if "b23.tv" in url:    # 哔哩哔哩短链
         url = get_real_url(url)
     url = url.strip("/")
-    m_obj = re.search(r"[?&]p=(\d+)", url)    # 合集多p视频旧格式
+    m_obj = re.search(r'[?&]p=(\d+)', url)    # 合集多p视频旧格式
     p = 0
     if m_obj:
         p = int(m_obj.group(1))

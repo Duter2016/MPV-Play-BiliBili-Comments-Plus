@@ -431,7 +431,8 @@ def export(func):
         __all__ = [func.__name__]
     return func
 
-
+"""
+#  20240503后，B站api服务端有更新，好像只接受来自浏览器的请求，请求头添加浏览器的UA，下面方法貌似失效
 def getComments(cid,font_size = 25):
     # url = 'https://comment.bilibili.com/{}.xml'.format(cid[0])
     url = ''.join(['https://comment.bilibili.com/',cid[0],'.xml'])
@@ -440,6 +441,31 @@ def getComments(cid,font_size = 25):
     ## for python 3.10 and newer,use "PROTOCOL_TLS_CLIENT"
     ## refer to "https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLS_SERVER"
     response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT).load_verify_locations("/etc/ssl/certs/ca-bundle.crt"))
+    data = str(zlib.decompress(response.read(), -zlib.MAX_WBITS), "utf-8")
+    response.close()
+    comments = []
+    str_io = io.StringIO(data)
+    comments.extend(ReadCommentsBilibili(FilterBadChars(str_io), font_size))
+    comments.sort(key= lambda ele: ele[0])
+    # print(comments[2])
+    return comments
+"""
+
+#  20240503后，B站api服务端有更新，好像只接受来自浏览器的请求，请求头添加浏览器的UA
+def getComments(cid,font_size = 25):
+    # url = 'https://comment.bilibili.com/{}.xml'.format(cid[0])
+#    url = ''.join(['https://comment.bilibili.com/',cid[0],'.xml'])
+    ## for python 3.6 to 3.9, use "PROTOCOL_TLS"
+    #response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS))
+    ## for python 3.10 and newer,use "PROTOCOL_TLS_CLIENT"
+    ## refer to "https://docs.python.org/3/library/ssl.html#ssl.PROTOCOL_TLS_SERVER"
+#    response = request.urlopen(url, context=ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT).load_verify_locations("/etc/ssl/certs/ca-bundle.crt"))
+    response = request.urlopen(request.Request(
+        url = ''.join(['https://comment.bilibili.com/',cid[0],'.xml']),
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0'
+        }
+    ))
     data = str(zlib.decompress(response.read(), -zlib.MAX_WBITS), "utf-8")
     response.close()
     comments = []
