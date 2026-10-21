@@ -46,7 +46,7 @@ url = str(geturl)
 
 
 def get_real_url(url):
-    r = requests.head(url, cookies=find_cookie, headers=headers)    # 不使用cookie
+    r = requests.head(url, headers=headers)    # 不使用cookie
 #    r = requests.head(url, cookies=find_cookie, headers=headers)    # 使用cookie
     return r.headers['Location']
 
