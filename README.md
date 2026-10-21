@@ -122,4 +122,25 @@ revda也是调用的mpv,并且支持弹幕。只需要获取视频播放地址�
 
 `dmlive -u <url>`
 
-### 6.有问题可反馈
+## 6.默认选用 640x360 的 AVC1 视频（可选）
+
+如果显卡硬解只支持 AVC1（H.264），可以加上本项目的 `scripts/ytdlautoformat.lua`：
+
+```
+cp scripts/ytdlautoformat.lua ~/.config/mpv/scripts/
+```
+
+该脚本修改自 [Samillion/mpv-ytdlautoformat](https://github.com/Samillion/mpv-ytdlautoformat)，默认的 yt-dlp 格式被改为：
+
+```
+bv[height<=360][vcodec^=avc1]+ba/bv[height<=360]+ba/b
+```
+
+即：优先选 ≤360P 的 AVC1 视频 + 最佳音轨；若该视频没有 360P 的 AVC1，则回退到任意 ≤360P 编码（此时可能走软解）。实测 B 站命中 `format_id 30016 · avc1.64001E · 640x360`，vaapi 硬解正常。
+
+注意：
+- 该脚本对所有 URL 生效，不受本项目弹幕逻辑限制；YouTube/Twitch 仍按脚本内的 `changedQuality = 480` 处理。
+- 想临时换清晰度，播放时按 `F` 调出 quality_menu 选择即可，不影响默认值。
+- 不想要 360P/AVC1，直接不装这个脚本，或修改其中 `ytdlDefault` 一行。
+
+### 7.有问题可反馈
